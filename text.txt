@@ -1,0 +1,4 @@
+PR80i0NlDC9kfHCo
+mongodb+srv://koustav:PR80i0NlDC9kfHCo@youtube.oftuymf.mongodb.net/
+
+mongodb://koustav:PR80i0NlDC9kfHCo@youtube-oo1.cluster-cyxwkxsdv89w.ap-south-1.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=global-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false
