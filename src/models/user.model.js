@@ -79,7 +79,7 @@ userSchema.methods.generateToken = function () {
         process.env.JWT_SECRET,
 
         {
-            expiresIn: "7d"
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRY
         })
 }
 
@@ -90,7 +90,7 @@ userSchema.methods.generateRefreshToken = function () {
         process.env.JWT_REFRESH_SECRET,
 
         {
-            expiresIn: "7d"
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY
         })
 }
 
