@@ -23,7 +23,10 @@ const upload = multer({
             cb(null, Date.now().toString())
         }
     })
-}).single('photo');
+}).fields([
+    { name: "avatar", maxCount: 1 },
+    { name: "coverImage", maxCount: 1 }
+]);
 
 // export this middleware
 
