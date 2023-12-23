@@ -1,6 +1,6 @@
 
 import express from "express"
-import { login, register, logout, userDetails, refreshAccessToken } from "../controllers/user.controller.js";
+import { login, register, logout, userDetails, refreshAccessToken, changeCurrentPassword, updateAccountDetails } from "../controllers/user.controller.js";
 import upload from "../middlewares/multer.middleware.js";
 import { verifyToken } from "../middlewares/auth.middleware.js";
 const router = express.Router();
@@ -21,13 +21,11 @@ router.route("/register").post(
 
 
 router.route('/login').post(login)
-
-router.route('/logout').post(verifyToken, logout)
-
 router.route('/user').get(verifyToken, userDetails);
-
+router.route("/change-password").post(verifyJWT, changeCurrentPassword)
+router.route("/update-account").patch(verifyJWT, updateAccountDetails)
 router.route('/refresh-token').post(refreshAccessToken);
-
+router.route('/logout').post(verifyToken, logout)
 
 
 export default router
