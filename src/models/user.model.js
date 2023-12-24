@@ -74,7 +74,6 @@ userSchema.methods.generateToken = function () {
         username: this.username,
         email: this.email,
         fullName: this.fullName,
-        avatar: this.avatar,
     },
         process.env.JWT_SECRET,
 

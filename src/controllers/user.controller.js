@@ -1,8 +1,9 @@
+import upload from "../middlewares/multer.middleware.js";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { uploadToCloudinary } from "../utils/cloudinary/cloudinary.js";
+import { deleteCloudinaryImage, uploadToCloudinary } from "../utils/cloudinary/cloudinary.js";
 
 export const generateAccessAndRefreshtokens = async (userId) => {
     try {
@@ -202,11 +203,10 @@ export const refreshAccessToken = asyncHandler(async (req, res, next) => {
 
 export const changeCurrentPassword = asyncHandler(async (req, res, next) => {
     let { currentPassword, newPassword, confirmPassword } = req.body
-    if (
-        [currentPassword, newPassword, confirmPassword].some((field) => field?.trim() === "")
-    ) {
-        throw new ApiError(400, "All fields are required")
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        throw new ApiError(400, "All fields are required");
     }
+
     const user = await User.findById(req.user?._id)
 
     if (!user) {
@@ -251,3 +251,41 @@ export const updateAccountDetails = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(200, user, "Account details updated successfully"))
 });
+
+export const updateUserAvatar = asyncHandler(async (req, res, next) => {
+    try {
+        const avatarPath = req.file?.path
+        if (!avatarPath) {
+            throw new ApiError(400, "Avatar file is required")
+        }
+
+        const userAvatar= await User.findById(req.user?._id)
+
+        const deletePreviousImg=await deleteCloudinaryImage(userAvatar.avatar)
+
+        if(!deletePreviousImg){
+            throw new ApiError(500, "Avatar delete failed")
+        }
+
+        const avatar = await uploadToCloudinary(avatarPath)
+
+        if (!avatar.url) {
+            throw new ApiError(500, "Error,avatar upload failed")
+        }
+
+        const user = await User.findByIdAndUpdate(
+            req.user?._id,
+            {
+                $set:{
+                    avatar: avatar.url
+                }
+            },
+            {new: true}
+        ).select("-password -refreshToken -coverImage -watchHistory -createdAt -updatedAt -__v")
+        res.status(200).json(
+            new ApiResponse(200, user, "Avatar updated successfully")
+        )
+    } catch(error) {
+        throw new ApiError(500, "Avatar upload failed",error)
+    }
+})
