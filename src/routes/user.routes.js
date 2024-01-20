@@ -1,6 +1,6 @@
 
 import express from "express"
-import { login, register, logout, userDetails, refreshAccessToken, changeCurrentPassword, updateAccountDetails, updateUserAvatar } from "../controllers/user.controller.js";
+import { login, register, logout, userDetails, refreshAccessToken, changeCurrentPassword, updateAccountDetails, updateUserAvatar, updateUserCoverImage } from "../controllers/user.controller.js";
 import upload from "../middlewares/multer.middleware.js";
 import { verifyToken } from "../middlewares/auth.middleware.js";
 const router = express.Router();
@@ -20,15 +20,17 @@ router.route("/register").post(
 // );
 
 
-router.route('/login').post(login)
+router.route('/login').post(login);
 router.route('/user').get(verifyToken, userDetails);
-router.route("/change-password").post(verifyToken, changeCurrentPassword)
-router.route("/update-account").patch(verifyToken, updateAccountDetails)
-router.route("/update-avatar").post(verifyToken, upload.single("avatar"),  updateUserAvatar)
+router.route("/change-password").post(verifyToken, changeCurrentPassword);
+router.route("/update-account").patch(verifyToken, updateAccountDetails);
+router.route("/update-avatar").post(verifyToken, upload.single("avatar"), updateUserAvatar);
+router.route("/update-coverImage").post(verifyToken, upload.single("coverImage"), updateUserCoverImage);
 router.route('/refresh-token').post(refreshAccessToken);
-router.route('/logout').post(verifyToken, logout)
+router.route('/logout').post(verifyToken, logout);
 
 
 export default router
 
 
+// updateUserCoverImage

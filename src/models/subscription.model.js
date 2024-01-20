@@ -8,7 +8,6 @@ const subscriptionSchema = new Schema({
         ref: 'User'
     },
     expirationTime: String,
-    keys: Schema.Types.Mixed,
     
 },{
     timestamps: true
