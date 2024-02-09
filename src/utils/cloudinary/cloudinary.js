@@ -1,5 +1,8 @@
-import { v2 as cloudinary } from 'cloudinary';
-import fs from "fs"
+import {v2 as cloudinary} from 'cloudinary';
+import fs from "fs";
+import { promisify } from 'util';
+
+const unlinkAsync = promisify(fs.unlink); // Promisify the fs.unlink function for use with async/await
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -7,22 +10,39 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-
-export const uploadToCloudinary = async (file) => {
+export const uploadImageToCloudinary = async (localFilePath ) => {
     try {
-        if (!file) return null;
-        const uploadedImage = await cloudinary.uploader.upload(file, {
-            resource_type: "auto"
-        });
-        // console.log(uploadedImage);
-        fs.unlinkSync(file) // remove the locally saved temporary file after upload
-        return uploadedImage;
-    } catch (error) {
-        fs.unlinkSync(file) // remove the locally saved temporary file as the upload operation got failed
-        return null;
-    }
-}
+        if (!localFilePath) throw new Error('No file path specified.');
+        const response = await cloudinary.uploader.upload(localFilePath,{resource_type: 'image'});
+        await unlinkAsync(localFilePath);
+        return response;
 
+    } catch (error) {
+        try {
+            await unlinkAsync(localFilePath);
+        } catch (unlinkError) {
+            console.error('An error occurred while trying to delete the local file:', unlinkError.message);
+        }
+        throw new Error(`Failed to upload file to Cloudinary: ${error.message || error}`);
+    }
+};
+
+export const uploadVideoToCloudinary = async (localFilePath ) => {
+    try {
+        if (!localFilePath) throw new Error('No file path specified.');
+        const response = await cloudinary.uploader.upload(localFilePath,{resource_type:'video'});
+        await unlinkAsync(localFilePath);
+        return response;
+
+    } catch (error) {
+        try {
+            await unlinkAsync(localFilePath);
+        } catch (unlinkError) {
+            console.error('An error occurred while trying to delete the local file:', unlinkError.message);
+        }
+        throw new Error(`Failed to upload file to Cloudinary: ${error.message || error}`);
+    }
+};
 
 
 export const deleteCloudinaryImage = async (imageUrl) => {

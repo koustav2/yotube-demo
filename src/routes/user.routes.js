@@ -1,7 +1,7 @@
 
 import express from "express"
 import { login, register, logout, userDetails, refreshAccessToken, changeCurrentPassword, updateAccountDetails, updateUserAvatar, updateUserCoverImage } from "../controllers/user.controller.js";
-import upload from "../middlewares/multer.middleware.js";
+import {upload} from "../middlewares/multer.middleware.js";
 import { verifyToken } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 

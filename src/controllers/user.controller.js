@@ -3,7 +3,7 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { deleteCloudinaryImage, uploadToCloudinary } from "../utils/cloudinary/cloudinary.js";
+import { deleteCloudinaryImage, uploadImageToCloudinary } from "../utils/cloudinary/cloudinary.js";
 
 export const generateAccessAndRefreshtokens = async (userId) => {
     try {
@@ -54,11 +54,11 @@ export const register = asyncHandler(async (req, res, next) => {
     }
     const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
-    const avatar = await uploadToCloudinary(avatarLocalPath)
+    const avatar = await uploadImageToCloudinary(avatarLocalPath)
     if (!avatar) {
         throw new ApiError(500, "Avatar upload failed")
     }
-    const coverImage = await uploadToCloudinary(coverImageLocalPath)
+    const coverImage = await uploadImageToCloudinary(coverImageLocalPath)
 
     const user = await User.create({
         fullName,
@@ -267,7 +267,7 @@ export const updateUserAvatar = asyncHandler(async (req, res, next) => {
             throw new ApiError(500, "Avatar delete failed")
         }
 
-        const avatar = await uploadToCloudinary(avatarPath)
+        const avatar = await uploadImageToCloudinary(avatarPath)
 
         if (avatar.url === '') {
             throw new ApiError(500, "Error while avatar upload")
@@ -305,7 +305,7 @@ export const updateUserCoverImage = asyncHandler(async (req, res, next) => {
             throw new ApiError(500, "CoverImage delete failed")
         }
 
-        const coverImage = await uploadToCloudinary(coverImagePath)
+        const coverImage = await uploadImageToCloudinary(coverImagePath)
 
         if (coverImage.url === '') {
             throw new ApiError(500, "Error while coverImage upload")
