@@ -18,7 +18,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
     const allVideo = await Video.aggregate([
         {
             $match: {
-                isPublished: true,
+                owner: userId ? mongoose.Types.ObjectId(userId) : { $exists: true },
             },
         },
         {
@@ -156,7 +156,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
     if (!video) {
         throw new ApiError(404, "Video not found");
     }
-    await video.deleteOne();
+    await Video.findByIdAndDelete(videoId);
     await deleteCloudinaryImage(video.thumbnail);
     await deleteCloudinaryImage(video.videoFile);
     res.status(200).json(new ApiResponse(200, "Video deleted successfully"));

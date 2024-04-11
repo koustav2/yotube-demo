@@ -3,7 +3,7 @@ import { DB_NAME } from '../contants.js';
 
 export const connectDB = async () => {
     try {
-        const instance = await connect(`${process.env.MONGODB_URI_2}/${DB_NAME}`);
+        const instance = await connect(`${process.env.MONGODB_URI_2}`);
        
         console.log(instance.connection.readyState);
         console.log('Connected to MongoDB');

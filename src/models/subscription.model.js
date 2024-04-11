@@ -2,12 +2,14 @@ import mongoose,{Schema} from 'mongoose'
 
 
 const subscriptionSchema = new Schema({
-    subscriber: {type: Schema.Types.ObjectId, ref: 'User'},
+    // one who is subscribing
+    subscriber: {type: Schema.Types.ObjectId, ref: 'User'}, 
+    
+    // onw to whom subscriber is subscribingß
     channel: {
         type: Schema.Types.ObjectId,
         ref: 'User'
-    },
-    expirationTime: String,
+    }
     
 },{
     timestamps: true
