@@ -24,7 +24,18 @@ import userRouter from './routes/user.routes.js'
 import videoRouter from './routes/video.routes.js'
 import subscription from './routes/subscription.routes.js'
 import playlistRouter from './routes/playlist.routes.js'
+
 // declare routes
+app.get('/',(req,res)=>{
+    res.json({
+        message: "Welcome to Youtube API"
+    })
+})
+app.get('/api/v1/',(req,res)=>{
+    res.json({
+        message: "Go to /api/v1/users to getting started"
+    })
+})
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/videos", videoRouter);
 app.use("/api/v1/subscriptions", subscription);
