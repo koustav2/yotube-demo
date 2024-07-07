@@ -71,9 +71,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
     res
         .status(200)
         .json(new ApiResponse(200, allVideo, 'Success'))
-})
-
-
+});
 
 const publishAVideo = asyncHandler(async (req, res) => {
     const { title, description } = req.body
@@ -122,7 +120,7 @@ const getVideoById = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Video not found");
     }
     res.status(200).json(new ApiResponse(200, "Video found", video));
-})
+});
 
 const updateVideo = asyncHandler(async (req, res) => {
     const { videoId } = req.params
@@ -146,7 +144,7 @@ const updateVideo = asyncHandler(async (req, res) => {
     await video.save();
     res.status(200).json(new ApiResponse(200, "Video updated successfully", video));
 
-})
+});
 
 const deleteVideo = asyncHandler(async (req, res) => {
     const { videoId } = req.params
@@ -161,7 +159,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
     await deleteCloudinaryImage(video.thumbnail);
     await deleteCloudinaryImage(video.videoFile);
     res.status(200).json(new ApiResponse(200, "Video deleted successfully"));
-})
+});
 
 const togglePublishStatus = asyncHandler(async (req, res) => {
     const { videoId } = req.params
@@ -175,7 +173,7 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
     video.isPublished = !video.isPublished;
     await video.save();
     res.status(200).json(new ApiResponse(200, "Video publish status updated successfully", video));
-})
+});
 
 export {
     getAllVideos,
@@ -184,4 +182,4 @@ export {
     updateVideo,
     deleteVideo,
     togglePublishStatus
-}
+};

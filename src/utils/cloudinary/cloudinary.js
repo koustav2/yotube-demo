@@ -45,8 +45,6 @@ export const uploadVideoToCloudinary = async (localFilePath ) => {
         throw new Error(`Failed to upload file to Cloudinary: ${error.message || error}`);
     }
 };
-
-
 export const deleteCloudinaryImage = async (imageUrl) => {
     try {
         if (!imageUrl) return null;
@@ -57,4 +55,4 @@ export const deleteCloudinaryImage = async (imageUrl) => {
     } catch (error) {
         return null;
     }
-}
+};
